@@ -110,15 +110,15 @@ public class LimitInterceptor implements Interceptor {
 	}
 
 	private static boolean isNeedAppendLimit(String sql) {
-		if (!containsIgnoreCase(sql, LIMIT_FLAG)) {
-			return true;
-		}
+//		if (!containsIgnoreCase(sql, LIMIT_FLAG)) {
+//			return true;
+//		}
 		try {
 			Select select = (Select) CCJSqlParserUtil.parse(sql);
 			SelectBody selectBody = select.getSelectBody();
 			if (selectBody instanceof PlainSelect) {
 				PlainSelect plainSelect = (PlainSelect) selectBody;
-				if (Objects.nonNull(plainSelect.getLimit())) {
+				if (plainSelect.isForUpdate() || Objects.nonNull(plainSelect.getLimit())) {
 					return false;
 				}
 			} else if (selectBody instanceof SetOperationList) {
